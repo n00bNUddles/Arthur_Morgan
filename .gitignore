@@ -1,0 +1,26 @@
+# Byte-compiled Python files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# RobotPy build artifacts
+*.egg-info/
+build/
+dist/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# VSCode settings (if using VSCode)
+.vscode/
+
+# PyCharm settings (if using PyCharm)
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
