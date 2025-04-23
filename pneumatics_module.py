@@ -1,41 +1,33 @@
 import wpilib
-from wpilib import XboxController
+from wpilib import XboxController, DoubleSolenoid
 
 class PneumaticsModule:
     def __init__(self):
+        # Initialize PCM (Pneumatics Control Module)
         self.pcm = wpilib.PneumaticsControlModule()
-
-        # Assuming getSolenoids returns a list or an array
-        solenoids = self.pcm.getSolenoids()
-        if solenoids and len(solenoids) > 1:
-            self.solenoid0 = solenoids[0]  # Access solenoid 0
-            self.solenoid1 = solenoids[1]  # Access solenoid 1
-        else:
-            self.solenoid0 = None
-            self.solenoid1 = None
-
-        # Block solenoids 0 and 1 initially
-        self.block_solenoids()
-
+        
+        # Initialize solenoids with specific channels
+        # Format: DoubleSolenoid(module, forwardChannel, reverseChannel)
+        self.solenoid = DoubleSolenoid(
+            wpilib.PneumaticsModuleType.CTREPCM,  # Use CTRE PCM
+            0,  # Forward channel
+            1   # Reverse channel
+        )
+        
         # Initialize Xbox controller
         self.controller = XboxController(0)  # Assuming controller is on port 0
-
-    def block_solenoids(self):
-        if self.solenoid0:
-            self.solenoid0.set(False)
-        if self.solenoid1:
-            self.solenoid1.set(False)
+        
+        # Set initial state to off
+        self.solenoid.set(DoubleSolenoid.Value.kOff)
 
     def handle_controller_input(self):
         # Check if the "A" button is pressed
         if self.controller.getAButton():
-            self.release_solenoid0()
+            # Extend solenoid
+            self.solenoid.set(DoubleSolenoid.Value.kForward)
         else:
-            self.block_solenoids()
-
-    def release_solenoid0(self):
-        if self.solenoid0:
-            self.solenoid0.set(True)
+            # Retract solenoid
+            self.solenoid.set(DoubleSolenoid.Value.kReverse)
 
     def periodic(self):
         # This method should be called periodically (e.g., in a robot loop)
