@@ -3,13 +3,14 @@ from wpilib import XboxController, DoubleSolenoid
 
 class PneumaticsModule:
     def __init__(self):
-        # Initialize REV Pneumatics Hub
-        self.ph = wpilib.PneumaticsHub()  # REV Pneumatics Hub
+        # Initialize REV Pneumatic Hub (CAN ID 3)
+        self.ph = wpilib.PneumaticHub(3)  # REV Pneumatic Hub
         
         # Initialize solenoids with specific channels
-        # Format: DoubleSolenoid(module, forwardChannel, reverseChannel)
+        # Format: DoubleSolenoid(module, moduleType, forwardChannel, reverseChannel)
         self.solenoid = DoubleSolenoid(
-            wpilib.PneumaticsModuleType.REVPH,  # Use REV PH instead of CTRE PCM
+            3,  # Module number (CAN ID)
+            wpilib.PneumaticsModuleType.REVPH,  # Use REV PH
             0,  # Forward channel
             1   # Reverse channel
         )
@@ -29,7 +30,7 @@ class PneumaticsModule:
 
     def get_pressure(self):
         """Get the current pressure in PSI from the PH's pressure sensor."""
-        return self.ph.getPressure()
+        return self.ph.getPressure(0)  # Analog channel 0 for pressure sensor
 
     def is_compressor_enabled(self):
         """Check if the compressor is currently running."""
