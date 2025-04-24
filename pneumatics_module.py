@@ -3,13 +3,13 @@ from wpilib import XboxController, DoubleSolenoid
 
 class PneumaticsModule:
     def __init__(self):
-        # Initialize PCM (Pneumatics Control Module)
-        self.pcm = wpilib.PneumaticsControlModule()
+        # Initialize REV Pneumatics Hub
+        self.ph = wpilib.PneumaticsHub()  # REV Pneumatics Hub
         
         # Initialize solenoids with specific channels
         # Format: DoubleSolenoid(module, forwardChannel, reverseChannel)
         self.solenoid = DoubleSolenoid(
-            wpilib.PneumaticsModuleType.CTREPCM,  # Use CTRE PCM
+            wpilib.PneumaticsModuleType.REVPH,  # Use REV PH instead of CTRE PCM
             0,  # Forward channel
             1   # Reverse channel
         )
@@ -21,19 +21,19 @@ class PneumaticsModule:
         self.solenoid.set(DoubleSolenoid.Value.kOff)
 
         # Enable compressor with digital pressure switch
-        self.pcm.enableCompressorDigital()
+        self.ph.enableCompressorDigital()
 
         # Pressure thresholds
         self.MIN_PRESSURE = 60  # PSI
         self.MAX_PRESSURE = 80  # PSI
 
     def get_pressure(self):
-        """Get the current pressure in PSI from the PCM's pressure sensor."""
-        return self.pcm.getPressure()
+        """Get the current pressure in PSI from the PH's pressure sensor."""
+        return self.ph.getPressure()
 
     def is_compressor_enabled(self):
         """Check if the compressor is currently running."""
-        return self.pcm.getCompressor()
+        return self.ph.getCompressor()
 
     def handle_controller_input(self):
         current_pressure = self.get_pressure()
