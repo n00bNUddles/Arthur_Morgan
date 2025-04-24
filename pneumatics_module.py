@@ -29,8 +29,8 @@ class pneumatic:
         self.MAX_PRESSURE = 80  # PSI
 
     def get_pressure(self):
-        """Get the current pressure in PSI from the PH's pressure sensor."""
-        return self.ph.getPressure(0)  # Analog channel 0 for pressure sensor
+        """Get the current pressure in PSI from the PH's digital pressure sensor."""
+        return self.ph.getPressureSwitch()  # Using digital pressure switch
 
     def is_compressor_enabled(self):
         """Check if the compressor is currently running."""
@@ -51,17 +51,13 @@ class pneumatic:
         # This method should be called periodically (e.g., in a robot loop)
         self.handle_controller_input()
         
-        # Log pressure and compressor state
+        # Get current state
         pressure = self.get_pressure()
         compressor_running = self.is_compressor_enabled()
         
-        # Update SmartDashboard
+        # Update SmartDashboard with individual put methods
         wpilib.SmartDashboard.putNumber("Pneumatics Pressure (PSI)", pressure)
         wpilib.SmartDashboard.putBoolean("Compressor Running", compressor_running)
         wpilib.SmartDashboard.putBoolean("Ready to Vent", pressure >= self.MIN_PRESSURE)
-        
-        # Log warning if pressure is too low
-        if pressure < self.MIN_PRESSURE:
-            wpilib.SmartDashboard.putString("Pressure Warning", "Pressure too low! Waiting for compressor...")
-        else:
-            wpilib.SmartDashboard.putString("Pressure Warning", "")
+        wpilib.SmartDashboard.putString("Pressure Warning", 
+            "Pressure too low! Waiting for compressor..." if pressure < self.MIN_PRESSURE else "")
