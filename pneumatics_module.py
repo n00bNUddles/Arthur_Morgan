@@ -1,7 +1,7 @@
 import wpilib
 from wpilib import XboxController, DoubleSolenoid
 
-class PneumaticsModule:
+class pneumatic:
     def __init__(self):
         # Initialize REV Pneumatic Hub (CAN ID 3)
         self.ph = wpilib.PneumaticHub(3)  # REV Pneumatic Hub

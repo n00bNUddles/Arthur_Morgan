@@ -1,5 +1,5 @@
 import wpilib
-from pneumatics_module import PneumaticsModule
+from pneumatics_module import pneumatic
 from drive_module import drive
 from shooter_module import shooter
 from phoenix6.hardware import TalonFX
@@ -18,7 +18,7 @@ class MyRobot(wpilib.TimedRobot):
         self.drive = drive(self.motor1, self.motor2, self.controller)
 
         # Initialize pneumatics system
-        self.pneumatics = PneumaticsModule()
+        self.pneumatics = pneumatic()
 
         # Initialize shooter system
         self.shooter = shooter(self.shooter_motor, self.controller)
