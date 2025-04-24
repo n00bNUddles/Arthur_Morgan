@@ -39,13 +39,9 @@ class drive:
         # Combine turning inputs and apply sensitivity
         total_turn = (turn_speed + additional_turn) * self.TURN_SENSITIVITY
 
-        # Calculate final motor speeds
-        left_motor_speed = forward_speed + total_turn
-        right_motor_speed = forward_speed - total_turn
-
-        # Ensure speeds are within -1 to 1 range
-        left_motor_speed = max(-1, min(1, left_motor_speed))
-        right_motor_speed = max(-1, min(1, right_motor_speed))
+        # Calculate and clamp final motor speeds in one step
+        left_motor_speed = max(-1, min(1, forward_speed + total_turn))
+        right_motor_speed = max(-1, min(1, forward_speed - total_turn))
 
         # Set motors to calculated speeds
         self.motor1.set_control(DutyCycleOut(left_motor_speed))
